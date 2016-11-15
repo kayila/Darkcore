@@ -49,7 +49,7 @@ public abstract class AbstractBlockRenderer extends TileEntitySpecialRenderer im
 		int y = tileEntity.yCoord;
 		int z = tileEntity.zCoord;
 
-		Tessellator tessellator = Tessellator.instance;
+		Tessellator tessellator = Tessellator.getInstance();
 
 		if(handleLighting() && (w!= null))
 		{
@@ -135,7 +135,7 @@ public abstract class AbstractBlockRenderer extends TileEntitySpecialRenderer im
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		handleItemRenderType(type);
 
-		renderBlock(Tessellator.instance, null, 0,0,0);
+		renderBlock(Tessellator.getInstance(), null, 0,0,0);
 		GL11.glPopAttrib();
 		GL11.glPopMatrix();
 	}

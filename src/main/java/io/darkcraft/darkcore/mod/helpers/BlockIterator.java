@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class BlockIterator implements Iterator<SimpleCoordStore>
 {
@@ -53,7 +53,7 @@ public class BlockIterator implements Iterator<SimpleCoordStore>
 	private void addNearby(SimpleCoordStore point)
 	{
 		if (!diagonals)
-			for (ForgeDirection d : ForgeDirection.VALID_DIRECTIONS)
+			for (EnumFacing d : EnumFacing.VALUES)
 				add(point, point.getNearby(d));
 		else
 			for (int x = -1; x <= 1; x++)

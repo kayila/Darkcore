@@ -7,12 +7,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class SimpleCoordStore
 {
@@ -24,9 +25,10 @@ public class SimpleCoordStore
 	public SimpleCoordStore(TileEntity te)
 	{
 		world = WorldHelper.getWorldID(te);
-		x = te.xCoord;
-		y = te.yCoord;
-		z = te.zCoord;
+		BlockPos pos = te.getPos();
+		x = pos.getX();
+		y = pos.getY();
+		z = pos.getZ();
 	}
 
 	public SimpleCoordStore(int win, int xin, int yin, int zin)
@@ -68,12 +70,12 @@ public class SimpleCoordStore
 		return new SimpleDoubleCoordStore(world, x + 0.5, y + 0.5, z + 0.5);
 	}
 
-	public SimpleCoordStore getNearby(ForgeDirection dir)
+	public SimpleCoordStore getNearby(EnumFacing dir)
 	{
 		return getNearby(dir,1);
 	}
 
-	public SimpleCoordStore getNearby(ForgeDirection dir, int distance)
+	public SimpleCoordStore getNearby(EnumFacing dir, int distance)
 	{
 		int oX = dir.offsetX * distance;
 		int oY = dir.offsetY * distance;
@@ -199,7 +201,7 @@ public class SimpleCoordStore
 	public Block getBlock()
 	{
 		World w = getWorldObj();
-		if (w != null) if (!(w.getBlock(x, y, z) == Blocks.air)) return w.getBlock(x, y, z);
+		if (w != null) if (!(w.getBlock(x, y, z) == Blocks.AIR)) return w.getBlock(x, y, z);
 		return null;
 	}
 

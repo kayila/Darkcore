@@ -9,8 +9,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class SimulacrumItemBlock extends AbstractItemBlock
 {
@@ -66,7 +66,7 @@ public class SimulacrumItemBlock extends AbstractItemBlock
 		Block b = getBlock();
 		if (b instanceof IColorableBlock)
 		{
-			if ((m >= 0) && (m < ItemDye.field_150922_c.length)) return ItemDye.field_150922_c[m];
+			if ((m >= 0) && (m < ItemDye.DYE_COLORS.length)) return ItemDye.DYE_COLORS[m];
 		}
 		return 16777215;
 	}

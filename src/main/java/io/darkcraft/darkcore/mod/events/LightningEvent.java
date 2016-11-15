@@ -1,7 +1,7 @@
 package io.darkcraft.darkcore.mod.events;
 
 import net.minecraft.entity.effect.EntityLightningBolt;
-import cpw.mods.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.Event;
 
 public class LightningEvent extends Event
 {

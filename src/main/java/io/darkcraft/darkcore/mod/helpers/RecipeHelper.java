@@ -26,12 +26,12 @@ public class RecipeHelper
 		Pair<Block,Integer> key = new Pair(in,meta);
 		if(blockSmeltMap.containsKey(key))
 			return blockSmeltMap.get(key);
-		ItemStack result = FurnaceRecipes.smelting().getSmeltingResult(new ItemStack(in,1,meta));
+		ItemStack result = FurnaceRecipes.instance().getSmeltingResult(new ItemStack(in,1,meta));
 		if(result == null)
 			return addBlockSmelt(key, null);
 		Item i = result.getItem();
 		if(i instanceof ItemBlock)
-			return addBlockSmelt(key, new Pair(((ItemBlock)i).field_150939_a,result.getItemDamage()));
+			return addBlockSmelt(key, new Pair(((ItemBlock)i).block, result.getItemDamage()));
 		return addBlockSmelt(key, null);
 	}
 }

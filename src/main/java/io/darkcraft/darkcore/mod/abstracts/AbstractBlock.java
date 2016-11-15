@@ -2,9 +2,9 @@ package io.darkcraft.darkcore.mod.abstracts;
 
 import java.util.List;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.config.ConfigFile;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
@@ -84,12 +84,14 @@ public abstract class AbstractBlock extends Block implements IRecipeContainer
 		setHardness(-1.0f);
 		initData();
 		renderIcon = render;
-		if (this instanceof IColorableBlock)
-			setSubNames(ItemDye.field_150923_a);
-		else if (subNames == null) setIconArray(1);
-		opaque = isOpaqueCube();
-        lightOpacity = isOpaqueCube() ? 255 : 0;
-        canBlockGrass = !blockMaterial.getCanBlockGrass();
+		// TODO Reimplement this
+		//if (this instanceof IColorableBlock)
+		//	setSubNames(ItemDye.field_150923_a);
+		//else if (subNames == null) setIconArray(1);
+		// TODO Not a thing anymore
+		//opaque = isOpaqueCube();
+        //lightOpacity = isOpaqueCube() ? 255 : 0;
+        //canBlockGrass = !blockMaterial.blocksLight();
         RecipeHandler.addRecipeContainer(this);
 	}
 
@@ -111,7 +113,7 @@ public abstract class AbstractBlock extends Block implements IRecipeContainer
 	 */
 	public AbstractBlock(boolean render, String sm)
 	{
-		this(render, Material.iron, sm);
+		this(render, Material.IRON, sm);
 	}
 
 	/**
@@ -120,7 +122,7 @@ public abstract class AbstractBlock extends Block implements IRecipeContainer
 	 */
 	public AbstractBlock(String sm)
 	{
-		this(true, Material.iron, sm);
+		this(true, Material.IRON, sm);
 	}
 
 	/**
@@ -504,7 +506,7 @@ public abstract class AbstractBlock extends Block implements IRecipeContainer
 					return false;
 				for(ItemStack id : OreDictionary.getOres(OreDictionary.getOreName(oreDictIDs[0])))
 				{
-					if(OreDictionary.itemMatches(new ItemStack(Items.dye, 1, 32767), id, false))
+					if(OreDictionary.itemMatches(new ItemStack(Items.DYE, 1, 32767), id, false))
 						return colorBlock(w, x, y, z, pl, ibic, is, id.getItemDamage(), 0);
 				}
 			}

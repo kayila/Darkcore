@@ -8,6 +8,7 @@ import io.darkcraft.darkcore.mod.network.DataPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class SoundHelper
@@ -19,12 +20,14 @@ public class SoundHelper
 
 	public static void playSound(TileEntity te, String sound, float vol)
 	{
-		playSound(WorldHelper.getWorldID(te.getWorldObj()), te.xCoord, te.yCoord, te.zCoord, sound, vol);
+		BlockPos pos = te.getPos();
+		playSound(WorldHelper.getWorldID(te.getWorld()), pos.getX(), pos.getY(), pos.getZ(), sound, vol);
 	}
 
 	public static void playSound(TileEntity te, String sound, float vol, float speed)
 	{
-		playSound(WorldHelper.getWorldID(te.getWorldObj()), te.xCoord, te.yCoord, te.zCoord, sound, vol, speed);
+		BlockPos pos = te.getPos();
+		playSound(WorldHelper.getWorldID(te.getWorld()), pos.getX(), pos.getY(), pos.getZ(), sound, vol, speed);
 	}
 
 	public static void playSound(World w, int x, int y, int z, String sound, float vol)

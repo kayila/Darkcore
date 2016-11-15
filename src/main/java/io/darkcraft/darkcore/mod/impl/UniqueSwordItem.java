@@ -72,7 +72,7 @@ public class UniqueSwordItem extends AbstractItem
 	@Override
 	public EnumAction getItemUseAction(ItemStack p_77661_1_)
 	{
-		return EnumAction.block;
+		return EnumAction.BLOCK;
 	}
 
 	private void removeItemFromPlayer(EntityLivingBase pl, ItemStack is)

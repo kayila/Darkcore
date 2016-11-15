@@ -6,7 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
 public class SimpleDoubleCoordStore
@@ -21,7 +21,7 @@ public class SimpleDoubleCoordStore
 
 	public SimpleDoubleCoordStore(TileEntity te)
 	{
-		this(WorldHelper.getWorldID(te), te.xCoord, te.yCoord, te.zCoord);
+		this(WorldHelper.getWorldID(te), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
 	}
 
 	public SimpleDoubleCoordStore(int win, double xin, double yin, double zin)

@@ -6,10 +6,14 @@ import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 
 /**
  * Commands should be registered by calling {@linkplain io.darkcraft.darkcore.mod.handlers.CommandHandler#registerCommand(AbstractCommand) CommandHandler.registerCommand(AbstractCommand)}<br>
@@ -23,7 +27,7 @@ public abstract class AbstractCommand implements ICommand
 	private static List<String> emptyList = new ArrayList<String>();
 
 	@Override
-	public int compareTo(Object arg0)
+	public int compareTo(ICommand arg0)
 	{
 		return 0;
 	}
@@ -41,12 +45,12 @@ public abstract class AbstractCommand implements ICommand
 	public abstract void addAliases(List<String> list);
 
 	@Override
-	public void processCommand(ICommandSender icommandsender, String[] astring)
+	public void execute(MinecraftServer server, ICommandSender icommandsender, String[] astring)
 	{
-		if (canCommandSenderUseCommand(icommandsender))
+		if (checkPermission(server ,icommandsender))
 			commandBody(icommandsender, astring);
 		else
-			icommandsender.addChatMessage(new ChatComponentText("You do not have permission for that command"));
+			icommandsender.addChatMessage(new TextComponentString("You do not have permission for that command"));
 	}
 
 	public boolean isPlayer(ICommandSender sen)
@@ -57,7 +61,7 @@ public abstract class AbstractCommand implements ICommand
 	public abstract void commandBody(ICommandSender icommandsender, String[] astring);
 
 	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender comSen)
+	public boolean checkPermission(MinecraftServer server, ICommandSender comSen)
 	{
 		if(comSen instanceof EntityPlayer)
 		{
@@ -68,9 +72,8 @@ public abstract class AbstractCommand implements ICommand
 		return comSen.canCommandSenderUseCommand(2, getCommandName());
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public List addTabCompletionOptions(ICommandSender icommandsender, String[] astring)
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos)
 	{
 		return null;
 	}
@@ -85,7 +88,7 @@ public abstract class AbstractCommand implements ICommand
 	{
 		if(toSend == null) return;
 		for(String s : toSend)
-			comsen.addChatMessage(new ChatComponentText(s));
+			comsen.addChatMessage(new TextComponentString(s));
 	}
 
 	public List<String> splitStr(String... toSplit)

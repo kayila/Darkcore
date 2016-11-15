@@ -8,13 +8,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.google.common.collect.HashMultimap;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.Type;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Type;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import gnu.trove.set.hash.THashSet;
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.abstracts.AbstractEntityDataStore;
@@ -171,7 +171,7 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 	}
 
 	@SubscribeEvent
-	public void onDimTransfer(cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent e)
+	public void onDimTransfer(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent e)
 	{
 		EntityPlayer p = e.player;
 		if(p == null) return;

@@ -18,11 +18,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.oredict.OreDictionary;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class WorldHelper
 {
@@ -57,7 +58,7 @@ public class WorldHelper
 	{
 		try
 		{
-			MinecraftServer s = MinecraftServer.getServer();
+			MinecraftServer s = ServerHelper.getServer();
 			if (s != null) return s.worldServerForDimension(id);
 		}
 		catch(RuntimeException e)
@@ -75,7 +76,7 @@ public class WorldHelper
 	 */
 	public static int getWorldID(World w)
 	{
-		return w.provider.dimensionId;
+		return w.provider.getDimension();
 	}
 
 	/**
@@ -83,7 +84,7 @@ public class WorldHelper
 	 */
 	public static int getWorldID(TileEntity te)
 	{
-		return getWorldID(te.getWorldObj());
+		return getWorldID(te.getWorld());
 	}
 
 	/**
@@ -137,7 +138,8 @@ public class WorldHelper
 			return worldNameMap.get(id);
 		if (w != null)
 		{
-			String name = w.provider.getDimensionName();
+			// TODO Two dimensions with the same name?
+			String name = w.provider.getDimensionType().getName();
 			worldNameMap.put(id, name);
 			return name;
 		}
@@ -156,9 +158,9 @@ public class WorldHelper
 
 	public static boolean sameNBT(ItemStack a, ItemStack b)
 	{
-		if((a.stackTagCompound == null) ^ (b.stackTagCompound == null)) return false;
-		if(a.stackTagCompound == null) return true;
-		return a.stackTagCompound.equals(b.stackTagCompound);
+		if((a.getTagCompound() == null) ^ (b.getTagCompound() == null)) return false;
+		if(a.getTagCompound() == null) return true;
+		return a.getTagCompound().equals(b.getTagCompound());
 	}
 
 	public static boolean sameItem(ItemStack a, ItemStack b)
@@ -184,7 +186,7 @@ public class WorldHelper
 			return;
 		}
 		EntityItem ie = new EntityItem(pl.worldObj, pl.posX, pl.posY, pl.posZ, is);
-		ie.delayBeforeCanPickup = 0;
+		ie.setPickupDelay(0);
 		pl.worldObj.spawnEntityInWorld(ie);
 	}
 
@@ -205,7 +207,7 @@ public class WorldHelper
 		World w = sdcs.getWorldObj();
 		if (w == null) return;
 		EntityItem ie = new EntityItem(w, sdcs.x, sdcs.y, sdcs.z, is);
-		ie.delayBeforeCanPickup = 2;
+		ie.setPickupDelay(2);
 		w.spawnEntityInWorld(ie);
 	}
 
@@ -245,9 +247,10 @@ public class WorldHelper
 	{
 		if(w == null)
 			return false;
-		Block b = w.getBlock(x, y, z);
-		if (b == null) return w.isAirBlock(x, y, z);
-		Boolean valid = w.isAirBlock(x, y, z) || b.isFoliage(w, x, y, z) || b.isReplaceable(w, x, y, z) || (b instanceof BlockFire);
+		final BlockPos pos = new BlockPos(x, y, z);
+		Block b = w.getBlockState(pos).getBlock();
+		if (b == null) return w.isAirBlock(pos);
+		Boolean valid = w.isAirBlock(pos) || b.isFoliage(w, pos) || b.isReplaceable(w, pos) || (b instanceof BlockFire);
 		if (valid) return valid;
 		if (b.getCollisionBoundingBoxFromPool(w, x, y, z) == null) return true;
 		return false;
@@ -301,7 +304,7 @@ public class WorldHelper
 	{
 		if((w == null) || (te == null))
 			return false;
-		w.setBlockToAir(te.xCoord, te.yCoord, te.zCoord);
+		w.setBlockToAir(te.getPos());
 		return true;
 	}
 

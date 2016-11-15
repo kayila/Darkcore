@@ -4,10 +4,10 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class RaytraceHelper
@@ -30,7 +30,7 @@ public class RaytraceHelper
 		return mop;
 	}
 
-	public static AxisAlignedBB getAABB(Vec3 s, Vec3 e)
+	public static AxisAlignedBB getAABB(Vec3d s, Vec3d e)
 	{
 		double mx = Math.min(s.xCoord, e.xCoord);
 		double my = Math.min(s.yCoord, e.yCoord);
@@ -41,28 +41,28 @@ public class RaytraceHelper
 		return AxisAlignedBB.getBoundingBox(mx,my,mz,mX,mY,mZ);
 	}
 
-	public static Vec3 getEndPosition(Entity tracer, int dist)
+	public static Vec3d getEndPosition(Entity tracer, int dist)
 	{
-		Vec3 end = tracer.getLookVec();
+		Vec3d end = tracer.getLookVec();
 		if(dist != 1)
 		{
-			end = Vec3.createVectorHelper(end.xCoord*dist, end.yCoord*dist, end.zCoord*dist);
+			end = new Vec3d(end.xCoord*dist, end.yCoord*dist, end.zCoord*dist);
 		}
 		return end.addVector(tracer.posX, tracer.posY + tracer.getEyeHeight(), tracer.posZ);
 	}
 
 	public static MovingObjectPosition rayTraceBlocks(World w, Vec3 s, Vec3 e, boolean l)
 	{
-		Vec3 s2 = Vec3.createVectorHelper(s.xCoord, s.yCoord, s.zCoord);
-		Vec3 e2 = Vec3.createVectorHelper(e.xCoord, e.yCoord, e.zCoord);
+		Vec3d s2 = new Vec3d(s.xCoord, s.yCoord, s.zCoord);
+		Vec3d e2 = new Vec3d(e.xCoord, e.yCoord, e.zCoord);
 		return w.rayTraceBlocks(s2, e2, l);
 	}
 
 	public static MovingObjectPosition rayTrace(Entity tracer, Vec3 end, boolean liquids, Class<? extends Entity> entClass, boolean doBlocks, boolean doEnts, Entity... skip)
 	{
-		Vec3 start = Vec3.createVectorHelper(tracer.posX, tracer.posY, tracer.posZ);
+		Vec3d start = new Vec3d(tracer.posX, tracer.posY, tracer.posZ);
 		if(ServerHelper.isServer() && (tracer instanceof EntityPlayer))
-			start = Vec3.createVectorHelper(tracer.posX, tracer.posY + tracer.getEyeHeight(), tracer.posZ);
+			start = new Vec3d(tracer.posX, tracer.posY + tracer.getEyeHeight(), tracer.posZ);
 		World w = tracer.worldObj;
 		if((tracer == null) || (w == null)) return null;
 		MovingObjectPosition mop = null;
@@ -113,7 +113,7 @@ public class RaytraceHelper
 		if(dist != 1)
 		{
 			double dsq = dist;
-			end = Vec3.createVectorHelper(end.xCoord*dsq, end.yCoord*dsq, end.zCoord*dsq);
+			end = new Vec3d(end.xCoord*dsq, end.yCoord*dsq, end.zCoord*dsq);
 		}
 		end = end.addVector(tracer.posX, tracer.posY + tracer.getEyeHeight(), tracer.posZ);
 		return rayTrace(tracer,end,liquids, entClass, blocks, ents, skip);
@@ -126,7 +126,7 @@ public class RaytraceHelper
 
 	public static MovingObjectPosition rayTrace(Entity tracer, boolean liquids, Class<? extends Entity> entClass, boolean blocks, boolean ents, Entity... skip)
 	{
-		Vec3 end = Vec3.createVectorHelper(tracer.posX+tracer.motionX, tracer.posY+tracer.motionY, tracer.posZ+tracer.motionZ);
+		Vec3d end = new Vec3d(tracer.posX+tracer.motionX, tracer.posY+tracer.motionY, tracer.posZ+tracer.motionZ);
 		return rayTrace(tracer,end,liquids, entClass, blocks, ents, skip);
 	}
 

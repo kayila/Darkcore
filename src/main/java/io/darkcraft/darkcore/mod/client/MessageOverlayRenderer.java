@@ -102,7 +102,7 @@ public class MessageOverlayRenderer extends Gui
 	private void renderBox(int numLines)
 	{
 		RenderHelper.bindTexture(background);
-		Tessellator tess = Tessellator.instance;
+		Tessellator tess = Tessellator.getInstance();
 		tess.startDrawingQuads();
 		face(tess,0,0,w,th, 0,0.75f,1f,0.25f);
 		for(int i = 0; i < numLines; i++)
@@ -127,7 +127,7 @@ public class MessageOverlayRenderer extends Gui
 		renderBox(h);
 		if(m.rl != null)
 		{
-			Tessellator tess = Tessellator.instance;
+			Tessellator tess = Tessellator.getInstance();
 			tess.startDrawingQuads();
 			RenderHelper.bindTexture(m.rl);
 			RenderHelper.uiFace(th, th, mh*2, mh*2, 1, m.uv, false);

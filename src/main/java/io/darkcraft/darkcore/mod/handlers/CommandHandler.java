@@ -5,7 +5,7 @@ import io.darkcraft.darkcore.mod.abstracts.AbstractCommand;
 
 import java.util.ArrayList;
 
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 public class CommandHandler
 {

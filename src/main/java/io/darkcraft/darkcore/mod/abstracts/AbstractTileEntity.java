@@ -17,12 +17,12 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.ServerConfigurationManager;
+import net.minecraft.server.management.PlayerList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class AbstractTileEntity extends TileEntity
 {
@@ -68,14 +68,14 @@ public abstract class AbstractTileEntity extends TileEntity
 		NBTTagCompound tag = new NBTTagCompound();
 		writeTransmittable(tag);
 		writeTransmittableOnly(tag);
-		Packet p = new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 3, tag);
+		Packet p = new SPacketUpdateTileEntity(this.pos, 3, tag);
 		return p;
 	}
 
 	public void updateNeighbours()
 	{
-		Block b = worldObj.getBlock(xCoord, yCoord, zCoord);
-		for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+		Block b = worldObj.getBlockState(pos).getBlock();
+		for (EnumFacing dir : EnumFacing.VALUES)
 		{
 			Block d = worldObj.getBlock(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ);
 			if (d != null) d.onNeighborBlockChange(worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ, b);
@@ -168,18 +168,18 @@ public abstract class AbstractTileEntity extends TileEntity
 		{
 			if (DarkcoreMod.debugText) System.out.println("[ATE]Called sendDataPacket");
 			Packet p = getDescriptionPacket();
-			MinecraftServer serv = MinecraftServer.getServer();
+			MinecraftServer serv = ServerHelper.getServer();
 			if (serv == null) return;
-			ServerConfigurationManager conf = serv.getConfigurationManager();
+			PlayerList conf = ServerHelper.getConfigManager();
 			if (conf == null) return;
-			conf.sendToAllNear(xCoord, yCoord, zCoord, 160, worldObj.provider.dimensionId, p);
+			conf.sendToAllNearExcept(null, pos.getX(), pos.getY(), pos.getZ(), 160, worldObj.provider.getDimension(), p);
 		}
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet)
 	{
-		NBTTagCompound nbt = packet.func_148857_g();
+		NBTTagCompound nbt = packet.getNbtCompound();
 		readTransmittable(nbt);
 		readTransmittableOnly(nbt);
 		super.onDataPacket(net, packet);
@@ -209,9 +209,10 @@ public abstract class AbstractTileEntity extends TileEntity
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
-		super.writeToNBT(nbt);
+		NBTTagCompound retnbt = super.writeToNBT(nbt);
 		writeTransmittable(nbt);
+		return retnbt;
 	}
 }

@@ -5,15 +5,18 @@ import io.darkcraft.darkcore.mod.interfaces.IColorableBlock;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class AbstractItemBlock extends ItemBlock
 {
@@ -35,8 +38,6 @@ public abstract class AbstractItemBlock extends ItemBlock
 		return damage;
 	}
 
-	protected abstract AbstractBlock getBlock();
-
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack)
 	{
@@ -45,12 +46,16 @@ public abstract class AbstractItemBlock extends ItemBlock
 		return bID.getUnlocalizedName();
 	}
 
+	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState state) {
+		return this.placeBlockAt(stack, player, world, new BlockPos(x, y, z), side, hitX, hitY, hitZ, state);
+	}
+	
 	@Override
-	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata)
+	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState state)
 	{
-		if (super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata))
+		if (super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, state))
 		{
-			NBTTagCompound tag = stack.stackTagCompound;
+			NBTTagCompound tag = stack.getTagCompound();
 			if (tag != null)
 			{
 				if (tag.hasKey("x"))
@@ -61,7 +66,7 @@ public abstract class AbstractItemBlock extends ItemBlock
 					tag.removeTag("id");
 				}
 				tag.setBoolean("placed", true);
-				TileEntity te = world.getTileEntity(x, y, z);
+				TileEntity te = world.getTileEntity(pos);
 				if (te != null) te.readFromNBT(tag);
 			}
 			return true;
@@ -92,7 +97,7 @@ public abstract class AbstractItemBlock extends ItemBlock
 		Block b = getBlock();
 		if (b instanceof IColorableBlock)
 		{
-			if ((m >= 0) && (m < ItemDye.field_150922_c.length)) return ItemDye.field_150922_c[m];
+			if ((m >= 0) && (m < ItemDye.DYE_COLORS.length)) return ItemDye.DYE_COLORS[m];
 		}
 		return 16777215;
 	}

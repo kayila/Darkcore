@@ -2,14 +2,15 @@ package io.darkcraft.darkcore.mod.network;
 
 import java.util.HashMap;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent.CustomPacketEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.CustomPacketEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
+import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.interfaces.IDataPacketHandler;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 
 public class PacketHandler
 {
@@ -30,7 +31,7 @@ public class PacketHandler
 	public void handleCustomPacket(CustomPacketEvent event)
 	{
 		if (DarkcoreMod.debugText) System.out.println("Packet received!");
-		FMLProxyPacket p = event.packet;
+		FMLProxyPacket p = event.getPacket();
 		int length = p.payload().getByte(0);
 		byte[] bytes = new byte[length];
 		p.payload().readerIndex(1);
@@ -38,7 +39,7 @@ public class PacketHandler
 		p.payload().readerIndex(1+length);
 		p.payload().discardReadBytes();
 		String discriminator = new String(bytes);
-		DataPacket dp = new DataPacket(p.payload());
+		DataPacket dp = new DataPacket(new PacketBuffer(p.payload()));
 		NBTTagCompound nbt = dp.getNBT();
 		if (handlers.containsKey(discriminator))
 			handlers.get(discriminator).handleData(nbt);

@@ -8,9 +8,9 @@ import java.util.UUID;
 
 import com.mojang.authlib.GameProfile;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import cpw.mods.fml.common.network.handshake.NetworkDispatcher;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.network.handshake.NetworkDispatcher;
 import io.darkcraft.darkcore.mod.abstracts.AbstractWorldDataStore;
 import io.darkcraft.darkcore.mod.handlers.entcontainer.EntityContainerHandler;
 import net.minecraft.entity.EntityLivingBase;
@@ -28,7 +28,7 @@ public class PlayerHelper
 	{
 		if(!pl.isDead) return pl;
 		EntityPlayerMP np = getPlayer(getUsername(pl));
-		if((np == null) || (np.playerNetServerHandler == null) || (np.playerNetServerHandler.netManager == null)) return null;
+		if((np == null) || (np.connection == null) || (np.connection.netManager == null)) return null;
 		return np;
 	}
 
@@ -52,7 +52,7 @@ public class PlayerHelper
 		if(pl.isDead) return false;
 		try
 		{
-			pl.playerNetServerHandler.netManager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get();
+			pl.connection.netManager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get();
 		}
 		catch(NullPointerException e)
 		{
@@ -149,10 +149,10 @@ public class PlayerHelper
 		return ServerHelper.getServer().getAllUsernames();
 	}
 
-	public static List<EntityPlayer> getAllPlayers()
+	public static List<EntityPlayerMP> getAllPlayers()
 	{
 		if(ServerHelper.isClient()) return null;
-		return ServerHelper.getConfigManager().playerEntityList;
+		return ServerHelper.getConfigManager().getPlayerList();
 	}
 
 	public static Team getTeam(EntityLivingBase ent)

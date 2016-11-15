@@ -1,7 +1,7 @@
 package io.darkcraft.darkcore.mod;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
 
@@ -16,7 +16,7 @@ public class DarkcoreTeleporter extends Teleporter
 	}
 
 	@Override
-	public void placeInPortal(Entity par1Entity, double par2, double par4, double par6, float par8)
+	public void placeInPortal(Entity par1Entity, float rotationYaw)
 	{
 		int i = MathHelper.floor_double(par1Entity.posX);
 		int j = MathHelper.floor_double(par1Entity.posY) - 1;
@@ -30,7 +30,7 @@ public class DarkcoreTeleporter extends Teleporter
 	 * Place an entity in a nearby portal which already exists.
 	 */
 	@Override
-	public boolean placeInExistingPortal(Entity par1Entity, double par2, double par4, double par6, float par8)
+	public boolean placeInExistingPortal(Entity par1Entity, float rotationYaw)
 	{
 		return false;
 	}

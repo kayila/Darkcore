@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public abstract class AbstractObjRenderer extends AbstractBlockRenderer
@@ -21,12 +22,13 @@ public abstract class AbstractObjRenderer extends AbstractBlockRenderer
 		// This will move our renderer so that it will be on proper place in the world
 		GL11.glTranslatef((float) d0, (float) d1, (float) d2);
 
-		World w = tileEntity.getWorldObj();
-		int x = tileEntity.xCoord;
-		int y = tileEntity.yCoord;
-		int z = tileEntity.zCoord;
+		World w = tileEntity.getWorld();
+		BlockPos pos = tileEntity.getPos();
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
 
-		Tessellator tessellator = Tessellator.instance;
+		Tessellator tessellator = Tessellator.getInstance();
 
 		if(handleLighting() && (w != null))
 		{

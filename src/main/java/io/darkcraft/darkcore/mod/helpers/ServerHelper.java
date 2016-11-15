@@ -7,19 +7,19 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.zip.ZipException;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Type;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Type;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.ServerConfigurationManager;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.server.management.PlayerList;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 
 public class ServerHelper
 {
@@ -96,23 +96,24 @@ public class ServerHelper
 
 	public static MinecraftServer getServer()
 	{
-		return MinecraftServer.getServer();
+		return FMLCommonHandler.instance().getMinecraftServerInstance();
 	}
 
-	public static ServerConfigurationManager getConfigManager()
+	// TODO Rename this function to something that makes more sense with the new terminology
+	public static PlayerList getConfigManager()
 	{
-		return MinecraftServer.getServer().getConfigurationManager();
+		return getServer().getPlayerList();
 	}
 
 	public static EntityPlayerMP getPlayer(String username)
 	{
 		if((username == null) || username.isEmpty()) return null;
-		List playerEnts = getConfigManager().playerEntityList;
+		List playerEnts = getConfigManager().getPlayerList();
 		for (Object o : playerEnts)
 		{
 			if (o instanceof EntityPlayerMP)
 			{
-				if (((EntityPlayerMP) o).getCommandSenderName().equalsIgnoreCase(username)) return (EntityPlayerMP) o;
+				if (((EntityPlayerMP) o).getName().equalsIgnoreCase(username)) return (EntityPlayerMP) o;
 			}
 		}
 		return null;
@@ -120,7 +121,7 @@ public class ServerHelper
 
 	public static String getUsername(EntityPlayer player)
 	{
-		return player.getCommandSenderName();
+		return player.getName();
 	}
 
 	/**
@@ -132,7 +133,7 @@ public class ServerHelper
 	 */
 	public static void sendString(EntityPlayer pl, String source, String s)
 	{
-		sendString(pl, new ChatComponentText("[" + source + "] " + s));
+		sendString(pl, new TextComponentString("[" + source + "] " + s));
 	}
 
 	/**
@@ -141,7 +142,7 @@ public class ServerHelper
 	 * @param pl
 	 * @param message
 	 */
-	public static void sendString(EntityPlayer pl, ChatComponentText message)
+	public static void sendString(EntityPlayer pl, TextComponentString message)
 	{
 		if(pl == null) return;
 		pl.addChatMessage(message);
@@ -155,7 +156,7 @@ public class ServerHelper
 	 */
 	public static void sendString(EntityPlayer pl, String string)
 	{
-		sendString(pl, new ChatComponentText(string));
+		sendString(pl, new TextComponentString(string));
 	}
 
 	/**
@@ -166,7 +167,7 @@ public class ServerHelper
 	 * @param string
 	 * @param color
 	 */
-	public static void sendString(EntityPlayer pl, String source, String string, EnumChatFormatting color)
+	public static void sendString(EntityPlayer pl, String source, String string, TextFormatting color)
 	{
 		sendString(pl, "["+source+"]"+string, color);
 	}
@@ -178,7 +179,7 @@ public class ServerHelper
 	 * @param string
 	 * @param color
 	 */
-	public static void sendString(EntityPlayer pl, String string, EnumChatFormatting color)
+	public static void sendString(EntityPlayer pl, String string, TextFormatting color)
 	{
 		sendString(pl, string, color, false, false, false, false);
 	}
@@ -190,7 +191,7 @@ public class ServerHelper
 	 * @param string
 	 * @param color
 	 */
-	public static void sendItalicString(EntityPlayer pl, String string, EnumChatFormatting color)
+	public static void sendItalicString(EntityPlayer pl, String string, TextFormatting color)
 	{
 		sendString(pl, string, color, true, false, false, false);
 
@@ -203,7 +204,7 @@ public class ServerHelper
 	 * @param string
 	 * @param color
 	 */
-	public static void sendBoldString(EntityPlayer pl, String string, EnumChatFormatting color)
+	public static void sendBoldString(EntityPlayer pl, String string, TextFormatting color)
 	{
 		sendString(pl, string, color, false, true, false, false);
 
@@ -216,7 +217,7 @@ public class ServerHelper
 	 * @param string
 	 * @param color
 	 */
-	public static void sendStrikedThroughString(EntityPlayer pl, String string, EnumChatFormatting color)
+	public static void sendStrikedThroughString(EntityPlayer pl, String string, TextFormatting color)
 	{
 		sendString(pl, string, color, false, false, true, false);
 
@@ -229,7 +230,7 @@ public class ServerHelper
 	 * @param string
 	 * @param color
 	 */
-	public static void sendUnderlinedString(EntityPlayer pl, String string, EnumChatFormatting color)
+	public static void sendUnderlinedString(EntityPlayer pl, String string, TextFormatting color)
 	{
 		sendString(pl, string, color, false, false, false, true);
 
@@ -242,14 +243,14 @@ public class ServerHelper
 	 * @param string
 	 * @param color
 	 */
-	public static void sendString(EntityPlayer pl, String string, EnumChatFormatting color, boolean italics, boolean bold, boolean strikeThrough, boolean underLined)
+	public static void sendString(EntityPlayer pl, String string, TextFormatting color, boolean italics, boolean bold, boolean strikeThrough, boolean underLined)
 	{
-		ChatComponentText c = new ChatComponentText("");
-		c.getChatStyle().setColor(color);
-		c.getChatStyle().setItalic(italics);
-		c.getChatStyle().setBold(bold);
-		c.getChatStyle().setStrikethrough(strikeThrough);
-		c.getChatStyle().setUnderlined(underLined);
+		TextComponentString c = new TextComponentString("");
+		c.getStyle().setColor(color);
+		c.getStyle().setItalic(italics);
+		c.getStyle().setBold(bold);
+		c.getStyle().setStrikethrough(strikeThrough);
+		c.getStyle().setUnderlined(underLined);
 		c.appendText(string);
 		pl.addChatMessage(c);
 	}

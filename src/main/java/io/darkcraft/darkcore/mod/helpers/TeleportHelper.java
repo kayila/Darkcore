@@ -110,7 +110,7 @@ public class TeleportHelper
 	{
 		if(ent instanceof IBossDisplayData)
 			return;
-		MinecraftServer serv = MinecraftServer.getServer();
+		MinecraftServer serv = ServerHelper.getServer();
 		if (ServerHelper.isServer() && (serv != null) && (ent instanceof EntityLivingBase))
 		{
 			/*

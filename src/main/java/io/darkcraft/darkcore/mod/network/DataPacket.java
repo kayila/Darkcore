@@ -1,7 +1,6 @@
 package io.darkcraft.darkcore.mod.network;
 
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
@@ -9,25 +8,26 @@ import io.netty.buffer.Unpooled;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
 public class DataPacket extends FMLProxyPacket
 {
-	public ByteBuf	buffer;
+	public PacketBuffer buffer;
 
-	public DataPacket(ByteBuf payload, String channel)
+	public DataPacket(PacketBuffer payload, String channel)
 	{
 		super(payload, "darkcore");
 		buffer = payload;
 	}
 
-	public DataPacket(ByteBuf payload)
+	public DataPacket(PacketBuffer payload)
 	{
 		super(payload, "darkcore");
 		buffer = payload;
 	}
 
-	public DataPacket(ByteBuf payload, NBTTagCompound nbt, String id)
+	public DataPacket(PacketBuffer payload, NBTTagCompound nbt, String id)
 	{
 		super(payload, "darkcore");
 		byte[] bytes = id.getBytes();
@@ -50,7 +50,7 @@ public class DataPacket extends FMLProxyPacket
 
 	public DataPacket(NBTTagCompound nbt, String id)
 	{
-		this(Unpooled.buffer(), nbt, id);
+		this(new PacketBuffer(Unpooled.buffer()), nbt, id);
 	}
 
 	public NBTTagCompound getNBT()

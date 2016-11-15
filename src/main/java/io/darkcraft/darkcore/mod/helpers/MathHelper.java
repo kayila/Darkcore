@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
-import net.minecraft.util.Vec3;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.Vec3d;
 
 public class MathHelper
 {
@@ -159,12 +159,12 @@ public class MathHelper
 		shiftObjArray(arr,x);
 	}
 
-	public static Vec3 getVecBetween(SimpleDoubleCoordStore from, SimpleDoubleCoordStore to)
+	public static Vec3d getVecBetween(SimpleDoubleCoordStore from, SimpleDoubleCoordStore to)
 	{
 		if((from == null) || (to == null)) return null;
 		if(from.world != to.world) return null;
-		return Vec3.createVectorHelper(to.x-from.x,to.y-from.y,to.z-from.z);
+		return new Vec3d(to.x-from.x,to.y-from.y,to.z-from.z);
 	}
 
-	public static final ForgeDirection[] horizontal = new ForgeDirection[]{ForgeDirection.NORTH,ForgeDirection.EAST,ForgeDirection.SOUTH,ForgeDirection.WEST};
+	public static final EnumFacing[] horizontal = new EnumFacing[]{EnumFacing.NORTH,EnumFacing.EAST,EnumFacing.SOUTH,EnumFacing.WEST};
 }

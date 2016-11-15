@@ -31,7 +31,7 @@ public class RenderHelper
 
 	public static void face(float x, float y, float z, float X, float Z, UVStore uv, boolean draw)
 	{
-		Tessellator tess = Tessellator.instance;
+		Tessellator tess = Tessellator.getInstance();
 		if(draw)
 			tess.startDrawingQuads();
 		tess.addVertexWithUV(x, y, z, uv.u, uv.v);
@@ -44,7 +44,7 @@ public class RenderHelper
 
 	public static void uiFace(float x, float y, float w, float h, float zLevel, UVStore uv, boolean draw)
 	{
-		Tessellator tess = Tessellator.instance;
+		Tessellator tess = Tessellator.getInstance();
 		if(draw)
 			tess.startDrawingQuads();
 		tess.addVertexWithUV(x, y, zLevel, uv.u, uv.v);
@@ -63,7 +63,7 @@ public class RenderHelper
 
 	public static void cube(float x, float y, float z, float X, float Y, float Z, boolean draw, UVStore... uv)
 	{
-		Tessellator tess = Tessellator.instance;
+		Tessellator tess = Tessellator.getInstance();
 		if(draw)
 			tess.startDrawingQuads();
 		GL11.glEnable(GL11.GL_CULL_FACE);
@@ -115,7 +115,7 @@ public class RenderHelper
 		GL11.glPushMatrix();
 		IBlockState[][][] s = struct.getStructureDefinition();
 		rb.blockAccess=rba;
-		Tessellator.instance.startDrawingQuads();
+		Tessellator.getInstance().startDrawingQuads();
 		RenderHelper.bindTexture(new ResourceLocation("textures/atlas/blocks.png"));
 		for(int y = 0; y < s.length; y++)
 		{
@@ -135,7 +135,7 @@ public class RenderHelper
 				}
 			}
 		}
-		Tessellator.instance.draw();
+		Tessellator.getInstance().draw();
 		for(int y = 0; y < s.length; y++)
 		{
 			IBlockState[][] fl = s[y];

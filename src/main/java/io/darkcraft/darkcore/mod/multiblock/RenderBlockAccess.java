@@ -4,9 +4,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class RenderBlockAccess implements IBlockAccess
 {
@@ -42,9 +43,9 @@ public class RenderBlockAccess implements IBlockAccess
 	@Override
 	public Block getBlock(int x, int y, int z)
 	{
-		if((y < 0) || (y >= s.length) || (s[y] == null)) return Blocks.air;
-		if((x < 0) || (x >= s[y].length) || (s[y][x] == null)) return Blocks.air;
-		if((z < 0) || (z >= s[y][x].length) || (s[y][x][z] == null)) return Blocks.air;
+		if((y < 0) || (y >= s.length) || (s[y] == null)) return Blocks.AIR;
+		if((x < 0) || (x >= s[y].length) || (s[y][x] == null)) return Blocks.AIR;
+		if((z < 0) || (z >= s[y][x].length) || (s[y][x][z] == null)) return Blocks.AIR;
 		return s[y][x][z].getDefaultBlock();
 	}
 
@@ -106,10 +107,10 @@ public class RenderBlockAccess implements IBlockAccess
 	}
 
 	@Override
-	public boolean isSideSolid(int x, int y, int z, ForgeDirection side, boolean _default)
+	public boolean isSideSolid(BlockPos blockPos, EnumFacing side, boolean _default)
 	{
-		Block block = getBlock(x, y, z);
-		if(block == Blocks.air) return _default;
+		Block block = getBlock(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+		if(block == Blocks.AIR) return _default;
         return block.isSideSolid(this, x, y, z, side);
 	}
 

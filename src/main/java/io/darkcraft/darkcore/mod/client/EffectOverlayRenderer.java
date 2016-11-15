@@ -56,7 +56,7 @@ public class EffectOverlayRenderer  extends Gui
 
 	private void face(double x, double y, double w, double h, double u, double v, double U, double V)
 	{
-		Tessellator tess = Tessellator.instance;
+		Tessellator tess = Tessellator.getInstance();
 		tess.startDrawingQuads();
 		tess.addVertexWithUV(x, y+h, zLevel, u, V);
 		tess.addVertexWithUV(x+w, y+h, zLevel, U, V);

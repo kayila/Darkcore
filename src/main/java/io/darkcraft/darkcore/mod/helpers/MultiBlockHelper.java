@@ -11,24 +11,24 @@ import java.util.HashSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class MultiBlockHelper
 {
-	private static ForgeDirection[]	rotDirs	= new ForgeDirection[] { ForgeDirection.NORTH, ForgeDirection.EAST, ForgeDirection.SOUTH, ForgeDirection.WEST };
+	private static EnumFacing[]	rotDirs	= new EnumFacing[] { EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST };
 
 	public static boolean isMultiblockValid(TileEntity core, IMultiBlockStructure structure)
 	{
 		boolean valid = false;
-		for (ForgeDirection dir : rotDirs)
+		for (EnumFacing dir : rotDirs)
 		{
 			valid = valid || isMultiblockValid(dir, core, structure);
 		}
 		return valid;
 	}
 
-	private static boolean isMultiblockValid(ForgeDirection dir, TileEntity core, IMultiBlockStructure structure)
+	private static boolean isMultiblockValid(EnumFacing dir, TileEntity core, IMultiBlockStructure structure)
 	{
 		World w = core.getWorldObj();
 		int x = core.xCoord;
@@ -73,8 +73,8 @@ public class MultiBlockHelper
 
 		return true;
 	}
-
-	public static void generateStructure(IMultiBlockStructure structure, World w, SimpleCoordStore pos, ForgeDirection dir)
+	
+	public static void generateStructure(IMultiBlockStructure structure, World w, SimpleCoordStore pos, EnumFacing dir)
 	{
 		int x = pos.x;
 		int y = pos.y;
@@ -113,7 +113,7 @@ public class MultiBlockHelper
 		}
 	}
 
-	public static void generateAtFloor(IMultiBlockStructure structure, World w, SimpleCoordStore pos, ForgeDirection dir)
+	public static void generateAtFloor(IMultiBlockStructure structure, World w, SimpleCoordStore pos, EnumFacing dir)
 	{
 		boolean found = false;
 		IBlockState[][] floor = structure.getStructureDefinition()[structure.getCoreY()];

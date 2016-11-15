@@ -51,7 +51,7 @@ public class PotionHelper
 		if(potions == null) return -1;
 		for(int i = 0; i < potions.length; i++)
 			if((potions[i] != null) && potions[i].getName().equals(potionName))
-				return potions[i].getId();
+				return Potion.getIdFromPotion(potions[i]);
 		return -1;
 	}
 
@@ -59,7 +59,7 @@ public class PotionHelper
 	{
 		int index = getPotionIndex(potionName);
 		if(index == -1) return false;
-		PotionEffect pe = new PotionEffect(index, length);
+		PotionEffect pe = new PotionEffect(Potion.getPotionById(index), length);
 		ent.addPotionEffect(pe);
 		return true;
 	}
